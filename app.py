@@ -79,8 +79,8 @@ with metric_tab:
 
     with col2:
         st.subheader("Зависимость ИМТ от возраста:")
-        figure, subplots_set = plt.subplots()
-        sb.scatterplot(data=upd_df, x='Age', y='BMI', hue='Gender', ax=subplots_set)
+        figure, axes = plt.subplots()
+        sb.scatterplot(data=upd_df, x='Age', y='BMI', hue='Gender', ax=axes)
         st.pyplot(figure)
 
 
@@ -92,6 +92,17 @@ with distribution_tab:
         ['Daily_Steps', 'Hours_of_Sleep', 'Exercise_Hours_per_Week', 'Heart_Rate']
     )
     
-    figure, subplots_set = plt.subplots()
+    figure, axes = plt.subplots()
     sb.histplot(data=upd_df, x=selected_column, kde=True, hue='Gender', multiple='stack')
+    st.pyplot(figure)
+
+
+
+with correlation_tab:
+    st.subheader("Матрица корреляций")
+    numeric_cols = upd_df.select_dtypes(include=['float64', 'int64']).columns
+    corr_matrix = upd_df[numeric_cols].corr()
+    
+    figure, axes = plt.subplots(figsize=(10,8))
+    sb.heatmap(corr_matrix, annot=True, cmap='coolwarm', center=0, ax=axes)
     st.pyplot(figure)
