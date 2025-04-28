@@ -66,4 +66,32 @@ upd_df = df[    # датафрейм после фильтрации слайд�
 ]
 
 # вкладки для визуализации отфильтрованных данных
-metric_tab, distribution_tab, correlation_tab = st.tabs(["📈 Основные метрики", "📊 Распределения", "📉Корреляции"])
+metric_tab, distribution_tab, correlation_tab = st.tabs(["📈 Метрики", "📊 Распределения", "📉Корреляции"])
+
+# метрики (значения по полу в датасете и зависимость между ИМТ и возрастом)
+with metric_tab:
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.subheader("Средние показатели по полу в датасете")
+        stats_by_gender = upd_df.groupby('Gender')[['Height_cm','Weight_kg', 'Hours_of_Sleep', 'Exercise_Hours_per_Week', 'Heart_Rate']].mean()
+        st.bar_chart(stats_by_gender)
+
+    with col2:
+        st.subheader("Зависимость ИМТ от возраста:")
+        figure, subplots_set = plt.subplots()
+        sb.scatterplot(data=upd_df, x='Age', y='BMI', hue='Gender', ax=subplots_set)
+        st.pyplot(figure)
+
+
+
+with distribution_tab:
+    st.subheader("Распределение анализируемых показателей")
+    selected_column = st.selectbox(
+        "Выберите показатель:",
+        ['Daily_Steps', 'Hours_of_Sleep', 'Exercise_Hours_per_Week', 'Heart_Rate']
+    )
+    
+    figure, subplots_set = plt.subplots()
+    sb.histplot(data=upd_df, x=selected_column, kde=True, hue='Gender', multiple='stack')
+    st.pyplot(figure)
