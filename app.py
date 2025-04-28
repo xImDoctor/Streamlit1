@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 from PIL import Image
 
+import matplotlib.pyplot as plt
+import seaborn as sb
+
 # def show_dataset(): pass # определена в конце
 st.set_page_config(page_title="ImDoc's Streamlit App", page_icon="❤️‍🩹",         
                     layout="wide",
@@ -34,5 +37,33 @@ st.markdown("""
 - страдает ли от сердечных заболеваний `Heart_Disease`
 """)
 
+# визуализация представленных в датасете данных, используя контролы стримлита
+st.divider()
+st.header("Некоторая визуализация представленного датасета")
 
-st.subheader("Некоторая визуализация представленного датасета")
+
+# сайдбар
+st.sidebar.header("Фильтры данных для визуализации")
+age_range = st.sidebar.slider("Возраст:",
+                            min_value=int(df['Age'].min()),
+                            max_value=int(df['Age'].max()),
+                            value=(int(df['Age'].min()), 60))
+
+selected_gender = st.sidebar.multiselect("Пол:",
+                                    options=df['Gender'].unique(),
+                                     default=df['Gender'].unique()
+                                     )
+
+bmi_range = st.sidebar.slider("Индекс массы тела (ИМТ):",
+                                min_value=float(df['BMI'].min()),
+                                max_value=float(df['BMI'].max()),
+                                value=(float(df['BMI'].min()), 30.0))
+
+upd_df = df[    # датафрейм после фильтрации слайдерами сайдбара
+    (df['Age'].between(age_range[0], age_range[1])) &
+    (df['Gender'].isin(selected_gender)) &
+    (df['BMI'].between(bmi_range[0], bmi_range[1]))
+]
+
+# вкладки для визуализации отфильтрованных данных
+metric_tab, distribution_tab, correlation_tab = st.tabs(["📈 Основные метрики", "📊 Распределения", "📉Корреляции"])
