@@ -5,7 +5,6 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import seaborn as sb
 
-# def show_dataset(): pass # определена в конце
 st.set_page_config(page_title="ImDoc's Streamlit App", page_icon="❤️‍🩹",         
                     layout="wide",
                     initial_sidebar_state="auto",)
