@@ -15,9 +15,10 @@ df = pd.read_csv('dataset/health_activity_data.csv')
 
 
 st.title("Задание 1. Загрузка и отображение данных")
+st.divider()
 
 st.header("Health & Lifestyle Dataset")
-st.image(start_img, width=600);
+st.image(start_img, width=700);
 
 st.markdown("Датасет с `Kaggle`, содержащий информацию о *состоянии здоровья* и *стиле жизни* людей.")
 df
